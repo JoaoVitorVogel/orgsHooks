@@ -1,52 +1,48 @@
-import React, { useReducer, useMemo } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { ProdutorProps } from "./Produtores";
-import Estrelas from "../../../componentes/Estrelas";
+import React, { useMemo } from 'react';
+import { View, TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
 
-const distanciaEmMetrosFunction = (distancia: Number) => {
+import Estrelas from '../../../componentes/Estrelas';
+
+const distanciaEmMetros = (distancia) => {
     return `${distancia}m`;
 }
 
-export default function Produtor({ nome, imagem, distancia, estrelas}: ProdutorProps){
-    const[selecionado, inverterSelecionado] = useReducer(
-        (selecionado) => !selecionado,
-        false
-    ); 
-
-    const distanciaEmMetros: string = useMemo(() => distanciaEmMetrosFunction(distancia), [distancia]);
+export default function Produtor({ nome, imagem, distancia, estrelas, aoPressionar }) {
+    const distanciaTexto = useMemo(
+        () => distanciaEmMetros(distancia), 
+        [distancia]
+    );
 
     return <TouchableOpacity 
             style={estilos.cartao}
-            onPress={inverterSelecionado}
-            >
-        <Image style={estilos.imagem} source={imagem} accessibilityLabel={nome} />
+            onPress={aoPressionar}
+        >
+        <Image source={imagem} style={estilos.imagem} accessibilityLabel={nome} />
         <View style={estilos.informacoes}>
             <View>
                 <Text style={estilos.nome}>{ nome }</Text>
                 <Estrelas 
                     quantidade={estrelas}
-                    editavel={selecionado}
-                    grande={selecionado}
-                    />
+                />
             </View>
-            <Text style={estilos.distancia}>{ distanciaEmMetros }</Text>
+            <Text style={estilos.distancia}>{ distanciaTexto }</Text>
         </View>
     </TouchableOpacity>
 }
 
 const estilos = StyleSheet.create({
     cartao: {
-        backgroundColor: '#f6f6f6',
+        backgroundColor: '#F6F6F6',
         marginVertical: 8,
         marginHorizontal: 16,
         borderRadius: 6,
         flexDirection: "row",
 
-        //Android
-        elevation: 4, 
+        // Android
+        elevation: 4,
 
-        //IOS
-        shadowColor: 'black',
+        // iOS
+        shadowColor: '#000',
         shadowOffset: {
             width: 0,
             height: 2,
@@ -73,11 +69,9 @@ const estilos = StyleSheet.create({
         fontSize: 14,
         lineHeight: 22,
         fontWeight: 'bold',
-        color: 'black',
     },
     distancia: {
         fontSize: 12,
         lineHeight: 19,
-        color: 'black'
-    }
-})
+    },
+});
